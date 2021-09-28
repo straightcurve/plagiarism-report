@@ -1,4 +1,4 @@
-# Copyleaks plagiarism report
+# Copyleaks plagiarism report heavily modified to work with Incite
 
 [![npm:badge]][npm:page]
 
