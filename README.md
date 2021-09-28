@@ -1,10 +1,5 @@
 # Copyleaks plagiarism report heavily modified to work with Incite
 
-```bash
-# clone
-git clone --recurse-submodules --depth=1 git@github.com:straightcurve/plagiarism-report.git
-```
-
 [![npm:badge]][npm:page]
 
 This allows you to view Copyleaks plagiarism report on your website. The report is based on Copyleaks scan results you downloaded via [Copyleaks API][api]. By using this component you can view the report anytime without being restricted by the Copyleaks expiration policy and control access policy to the information for your users.
