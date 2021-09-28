@@ -1,0 +1,128 @@
+@import '../../../styles'
+:host
+	background-color: $background-color
+
+[text-container]
+	white-space: pre-line
+	word-break: break-word
+	padding: 1em
+	line-height: normal
+	i
+		opacity: 0.7
+
+	span[class*='cr-m-']
+		cursor: pointer
+		&.cr-m-0
+			background-color: $color-identical
+			&:hover
+				background-color: lighten($color-identical, 5%)
+
+
+		&.cr-m-1
+			background-color: $color-minor-changes
+			&:hover
+				background-color: lighten($color-minor-changes, 5%)
+
+
+		&.cr-m-2
+			background-color: $color-related
+			&:hover
+				background-color: lighten($color-related, 5%)
+
+
+		&.cr-m-100
+			background: #f0f0f0
+			color: red
+			text-decoration: underline
+			font-weight: bolder
+
+		&.cr-highlight
+			background-color: gold
+			&:hover
+				background-color: lighten(gold, 10%)
+
+
+
+
+cr-panel
+	cr-panel-header
+		text-transform: uppercase
+		@include lt-sm
+			font-size: 1em
+
+
+	cr-powered-by
+		height: 36px
+		@include lt-md
+			display: none
+
+
+	cr-panel-body
+		@include lt-sm
+			& > div
+				padding: 0em
+
+
+		position: relative
+		max-width: 100%
+		[card]
+			overflow-y: auto
+			//padding: 1em
+
+		[spacer]
+			height: calc(1em + 30px)
+
+		iframe
+			width: 100%
+			height: 100%
+			border: none
+			&:not([hidden])
+				display: block
+
+
+		[content-footer]
+			margin-top: 0.5em
+			@include lt-sm
+				margin-top: 0em
+
+
+
+
+[mat-menu-item]
+	[mat-button]
+		pointer-events: none
+
+
+[skeleton__body]
+	@for $i from 1 through 5
+		ngx-skeleton-loader:nth-child(5n + #{$i})
+			flex: 1
+			width: percentage((random(30) + 70) / 100)
+
+
+
+[mat-button]
+	min-width: 36px
+	padding: 0
+
+[skeleton__pagination-wrapper]
+	width: 100%
+	max-width: 320px
+
+#cr-hint-toggle-content
+	position: relative
+	top: -14px
+	left: -23px
+
+#cr-hint-go-to-next-match
+	position: relative
+	right: -2px
+	top: -5px
+
+.show-iframe
+	flex: 1 1 100%
+	max-height: 100%
+
+.hide-iframe
+	flex: 1 1 0%
+	height: 0 !important

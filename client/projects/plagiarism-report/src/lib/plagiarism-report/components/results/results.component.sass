@@ -1,0 +1,93 @@
+@import "../../../styles.sass"
+:host
+  background-color: $background-color
+  overflow: hidden
+
+cr-panel
+  flex: 1
+  height: 100%
+  cr-panel-header
+    text-transform: uppercase
+
+
+cr-panel-body
+  position: relative
+  .overlay-component-wrapper
+    position: absolute
+    display: flex
+    right: 0
+    left: 0
+    bottom: 0
+    top: 0
+    z-index: 1
+
+  cdk-virtual-scroll-viewport
+    padding: $default-spacing
+    margin: -$default-spacing
+    scrollbar-width: 0px
+    ::ng-deep
+      .cdk-virtual-scroll-content-wrapper
+        max-width: 100%
+
+      .cdk-virtual-scroll-spacer
+        &:nth-child(0)
+        &:nth-child(1)
+        &:nth-child(2)
+        &:nth-child(3)
+          transform: scaleY(0)
+
+
+
+    @include lt-sm
+      padding: $mobile-spacing
+      margin: 0 (-$mobile-spacing)
+
+    overflow-y: scroll
+
+  @include lt-sm
+    margin-top: 0
+
+
+[skeleton__card]
+  mat-divider
+    margin-top: $card-padding
+    margin-bottom: $card-padding
+    margin-left: -$card-padding
+    margin-right: -$card-padding
+
+  [footer]
+    height: 28px
+
+  @for $i from 1 through 5
+    ngx-skeleton-loader:nth-child(5n + #{$i})
+      width: percentage((random(30) + 70) / 100)
+
+
+
+[mat-button]
+  min-width: 36px
+  padding: 0
+
+.blur
+  filter: blur(5px)
+  overflow: hidden !important
+
+.powered-by-section
+  cr-powered-by
+    height: 44px
+    padding-top: 1px
+    border-top: 1px solid rgba(0, 0, 0, 0.12)
+    margin-top: 12px
+    margin-bottom: -4px
+
+
+#cr-hint-results-filter-list
+  position: relative
+  top: -5px
+  right: -11px
+
+#cr-hint-results-card
+  transform: translateX(45%)
+
+.results-container
+  overflow: scroll-y

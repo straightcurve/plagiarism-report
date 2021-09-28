@@ -1,25 +1,27 @@
 <cr-properties
-	*ngIf="!hasResultsOverlay"
-	[scanSummaryComponent]="config.scanSummaryComponent"
-	[isDownloading]="isDownloading"
-	[hideCreationTime]="hideCreationTime"
-	[expanded]="config.propertiesExpanded != null ? config.propertiesExpanded : true"
-	(expandChange)="propertiesExpandChange.emit($event)"
+  *ngIf="!hasResultsOverlay"
+  [scanSummaryComponent]="config.scanSummaryComponent"
+  [isDownloading]="isDownloading"
+  [hideCreationTime]="hideCreationTime"
+  [expanded]="
+    config.propertiesExpanded != null ? config.propertiesExpanded : true
+  "
+  (expandChange)="propertiesExpandChange.emit($event)"
 ></cr-properties>
 
 <div
-	main-wrapper
-	fxLayout="row nowrap"
-	fxLayoutAlign="start stretch"
-	fxLayout.lt-sm="column nowrap"
-	[class]="'cr-report-' + dir"
+  main-wrapper
+  fxLayout="row nowrap"
+  fxLayoutAlign="start stretch"
+  fxLayout.lt-sm="column nowrap"
+  [class]="'cr-report-' + dir"
 >
-	<cr-original></cr-original>
-	<ng-container *ngIf="reportViewMode == eReportViewModel.ScanningResult">
-		<cr-suspect [fxShow]="isOneToOne"></cr-suspect>
-		<cr-results [fxShow]="isOneToMany"></cr-results>
-	</ng-container>
-	<ng-container *ngIf="reportViewMode == eReportViewModel.Alerts">
-		<cr-alerts></cr-alerts>
-	</ng-container>
+  <cr-original></cr-original>
+  <ng-container *ngIf="reportViewMode == eReportViewModel.ScanningResult">
+    <cr-suspect [fxShow]="isOneToOne"></cr-suspect>
+    <cr-results [fxShow]="isOneToMany"></cr-results>
+  </ng-container>
+  <ng-container *ngIf="reportViewMode == eReportViewModel.Alerts">
+    <cr-alerts></cr-alerts>
+  </ng-container>
 </div>

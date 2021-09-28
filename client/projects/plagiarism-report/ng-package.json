@@ -3,7 +3,7 @@
 	"dest": "../../dist/plagiarism-report",
 	"deleteDestPath": true,
 
-	"whitelistedNonPeerDependencies": ["."],
+	"allowedNonPeerDependencies": ["."],
 	"lib": {
 		"styleIncludePaths": ["src/lib"],
 		"entryFile": "src/public-api.ts"

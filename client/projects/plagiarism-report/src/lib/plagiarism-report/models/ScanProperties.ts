@@ -1,5 +1,5 @@
-import { CompleteResult } from './api-models/CompleteResult';
+import { CompleteResult } from "./api-models/CompleteResult";
 
 export interface IScanSummeryComponent {
-	setCompleteResult: (result: CompleteResult) => void;
+  setCompleteResult: (result: CompleteResult) => void;
 }

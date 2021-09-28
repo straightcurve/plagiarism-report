@@ -8,17 +8,20 @@
 	"homepage": "https://api.copyleaks.com",
 	"version": "3.1.12",
 	"dependencies": {
-		"scroll-into-view-if-needed": "^2.2.20",
-		"@ncstate/sat-popover": "^4.0.0",
-		"@swimlane/ngx-charts": "^14.0.0",
-		"ngx-skeleton-loader": "^1.2.2",
-		"ngx-virtual-scroller": "^3.0.3",
-		"deep-equal": "^1.1.1"
+		"@ncstate/sat-popover": "^8.0.1",
+		"@swimlane/ngx-charts": "^19.0.1",
+		"deep-equal": "^1.1.1",
+		"ngx-infinite-scroll": "^10.0.1",
+		"ngx-skeleton-loader": "^4.0.0",
+		"scroll-into-view-if-needed": "^2.2.28"
 	},
 	"peerDependencies": {
-		"@angular/common": "^9.1.11",
-		"@angular/core": "^9.1.11",
-		"@angular/material": "^9.2.4",
-		"@angular/flex-layout": "^9.0.0-beta.29"
+		"@angular/common": "^12.2.0",
+		"@angular/core": "^12.2.0",
+		"@angular/flex-layout": "^12.0.0-beta.35",
+		"@angular/material": "^12.2.7"
+	},
+	"devDependencies": {
+		"@types/uuid": "^8.3.1"
 	}
 }

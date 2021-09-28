@@ -5,14 +5,10 @@
 		"target": "es2015",
 		"declaration": true,
 		"inlineSources": true,
-		"types": [
-			"jest",
-			"node"
-		],
-		"lib": [
-			"dom",
-			"es2019"
-		]
+		"types": ["node"],
+		"lib": ["dom", "es2019"],
+		"strict": false,
+		"resolveJsonModule": true
 	},
 	"angularCompilerOptions": {
 		"annotateClosureCompiler": false,
@@ -21,11 +17,7 @@
 		"fullTemplateTypeCheck": true,
 		"strictInjectionParameters": true,
 		"enableResourceInlining": true,
-		"enableIvy": false
+		"enableIvy": true
 	},
-	"exclude": [
-		"dist/**/*.*",
-		"src/test.ts",
-		"**/*.spec.ts"
-	]
+	"exclude": ["dist/**/*.*", "src/test.ts", "**/*.spec.ts"]
 }
