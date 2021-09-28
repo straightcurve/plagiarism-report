@@ -1,0 +1,30 @@
+{
+	"compileOnSave": false,
+	"compilerOptions": {
+		"baseUrl": "./",
+		"outDir": "./dist/out-tsc",
+		"sourceMap": true,
+		"declaration": false,
+		"downlevelIteration": true,
+		"experimentalDecorators": true,
+		"noUnusedParameters": true,
+		"noUnusedLocals": true,
+		"module": "esnext",
+		"moduleResolution": "node",
+		"allowSyntheticDefaultImports": true,
+		"resolveJsonModule": true,
+		"importHelpers": true,
+		"target": "es2015",
+		"typeRoots": ["node_modules/@types"],
+		"lib": ["dom", "es2019"],
+		"paths": {
+			"plagiarism-report": ["dist/plagiarism-report"],
+			"plagiarism-report/*": ["dist/plagiarism-report/*"]
+		}
+	},
+	"exclude": ["dist"],
+	"angularCompilerOptions": {
+		"fullTemplateTypeCheck": true,
+		"strictInjectionParameters": true
+	}
+}

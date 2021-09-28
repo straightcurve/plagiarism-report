@@ -1,20 +1,29 @@
 {
-    "folders": [
-        {
-            "name": "root",
-            "path": "."
-        },
-        {
-            "path": "server"
-        },
-        {
-            "path": "plagiarism-report"
-        }
-    ],
-    "settings": {
-        "files.exclude": {
-            "client/": true,
-            "server/": true
-        }
-    }
+	"folders": [
+		{
+			"name": ".",
+			"path": "."
+		},
+		{
+			"path": "server"
+		},
+		{
+			"path": "client"
+		},
+		{
+			"path": "client/projects/plagiarism-report"
+		},
+		{
+			"path": "client/projects/demo-app"
+		},
+		{
+			"path": "client/scripts"
+		}
+	],
+	"settings": {
+		"files.exclude": {
+			"client/": true,
+			"server/": true
+		}
+	}
 }
