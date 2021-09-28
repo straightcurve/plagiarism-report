@@ -3,6 +3,8 @@
  */
 
 // services
+export * from "./lib/plagiarism-report/components/result-card/result-card.component";
+export * from "./lib/shared/operators/untilDestroy";
 export * from "./lib/plagiarism-report/services/copyleaks.service";
 export * from "./lib/plagiarism-report/services/copyleaks-translate.service";
 // components

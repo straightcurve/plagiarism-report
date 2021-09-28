@@ -1,9 +1,5 @@
 {
-	"bracketSpacing": true,
-	"semi": true,
-	"singleQuote": true,
-	"trailingComma": "es5",
-	"htmlWhitespaceSensitivity": "ignore",
-	"printWidth": 120,
-	"useTabs": true
+	"singleQuote": false,
+	"tabWidth": 2,
+	"trailingComma": "es5"
 }

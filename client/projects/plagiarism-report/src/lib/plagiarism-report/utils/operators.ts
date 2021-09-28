@@ -1,7 +1,8 @@
-import { filter, scan, distinctUntilChanged } from "rxjs/operators";
+import { filter, scan, distinctUntilChanged } from 'rxjs/operators';
 
+//@ts-ignore
 function deepEqual(original: any, changed: any) {
-  return false;
+	return false;
 }
 
 /**
@@ -17,14 +18,12 @@ export const falsey = <T>() => filter<T>((value) => !value);
 /**
  * An rxjs operator that filters any array that has one or more elements.
  */
-export const notEmpty = <T extends { length: number }>() =>
-  filter<T>((value) => !!value.length);
+export const notEmpty = <T extends { length: number }>() => filter<T>((value) => !!value.length);
 
 /**
  * An rxjs operator that will accumulate items to an array
  */
-export const accumulate = <T>() =>
-  scan<T, T[]>((acc: T[], curr: T | T[]) => acc.concat(curr), []);
+export const accumulate = <T>() => scan<T, T[]>((acc: T[], curr: T | T[]) => acc.concat(curr), []);
 
 /**
  * An rxjs operator that will filter deeply equal sequential items

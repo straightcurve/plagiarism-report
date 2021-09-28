@@ -1,23 +1,23 @@
 {
-	"extends": "../../tsconfig.json",
-	"compilerOptions": {
-		"outDir": "../../out-tsc/lib",
-		"target": "es2015",
-		"declaration": true,
-		"inlineSources": true,
-		"types": ["node"],
-		"lib": ["dom", "es2019"],
-		"strict": false,
-		"resolveJsonModule": true
-	},
-	"angularCompilerOptions": {
-		"annotateClosureCompiler": false,
-		"skipTemplateCodegen": true,
-		"strictMetadataEmit": true,
-		"fullTemplateTypeCheck": true,
-		"strictInjectionParameters": true,
-		"enableResourceInlining": true,
-		"enableIvy": true
-	},
-	"exclude": ["dist/**/*.*", "src/test.ts", "**/*.spec.ts"]
+  "extends": "../../../../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../out-tsc/lib",
+    "target": "es2015",
+    "declaration": true,
+    "inlineSources": true,
+    "types": ["node"],
+    "lib": ["dom", "es2019"],
+    "strict": false,
+    "resolveJsonModule": true
+  },
+  "angularCompilerOptions": {
+    "annotateClosureCompiler": false,
+    "skipTemplateCodegen": true,
+    "strictMetadataEmit": true,
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true,
+    "enableResourceInlining": true,
+    "enableIvy": true
+  },
+  "exclude": ["dist/**/*.*", "src/test.ts", "**/*.spec.ts"]
 }

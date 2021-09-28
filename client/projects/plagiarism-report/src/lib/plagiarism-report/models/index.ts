@@ -8,3 +8,4 @@ export * from "./ResultsSettings";
 export * from "./Matches";
 export * from "./HtmlHelper";
 export * from "./ReportStatistics";
+export * from "./ScanProperties";

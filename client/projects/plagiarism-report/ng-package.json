@@ -1,11 +1,11 @@
 {
-	"$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
-	"dest": "../../dist/plagiarism-report",
-	"deleteDestPath": true,
+  "$schema": "../../../../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../../../../dist/plagiarism-report",
+  "deleteDestPath": true,
 
-	"allowedNonPeerDependencies": ["."],
-	"lib": {
-		"styleIncludePaths": ["src/lib"],
-		"entryFile": "src/public-api.ts"
-	}
+  "allowedNonPeerDependencies": ["."],
+  "lib": {
+    "styleIncludePaths": ["src/lib"],
+    "entryFile": "src/public-api.ts"
+  }
 }
