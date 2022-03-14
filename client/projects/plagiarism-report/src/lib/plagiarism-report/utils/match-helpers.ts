@@ -74,22 +74,28 @@ export const fillMissingGaps = (
  * @param matches the base `matches` to process
  */
 export const findNests = (matches: Match[]): Match[][] => {
-  if (matches.length === 0) {
-    return [];
-  }
-  matches.sort((a, b) => a.start - b.start || a.end - b.end || a.type - b.type);
-  const nests: Match[][] = [[matches[0]]];
-  let nestFurthestEnd = matches[0].end;
-  for (const interval of matches.slice(1)) {
-    if (interval.start > nestFurthestEnd) {
-      nests.push([interval]);
-      nestFurthestEnd = interval.end;
-    } else {
-      nests[nests.length - 1].push(interval);
-      nestFurthestEnd = Math.max(nestFurthestEnd, interval.end);
-    }
-  }
-  return nests;
+	if (matches.length === 0) {
+		return [];
+	}
+	matches.sort((a, b) => a.start - b.start || a.end - b.end || a.type - b.type);
+	const nests: Match[][] = [[matches[0]]];
+	let nestFurthestEnd = matches[0].end;
+	let nestFurthestReason = matches[0].reason;
+
+	for (const interval of matches.slice(1)) {
+		if (
+			interval.start > nestFurthestEnd ||
+			(interval.start === nestFurthestEnd && interval.reason !== nestFurthestReason)
+		) {
+			nests.push([interval]);
+			nestFurthestEnd = interval.end;
+		} else {
+			nests[nests.length - 1].push(interval);
+			nestFurthestEnd = Math.max(nestFurthestEnd, interval.end);
+		}
+		nestFurthestReason = interval.reason;
+	}
+	return nests;
 };
 
 /**
@@ -118,56 +124,47 @@ const mergeMatchesInNest = (matches: Match[]): Match[] => {
     .reduce(extractMatchEndpoints, [])
     .sort((a, b) => a.index - b.index || b.kind - a.kind);
 
-  const subMatches: Match[] = [];
-  const idMap: { [key: string]: number } = {};
-  const types: number[] = [0, 0, 0, 0];
-  let start: number;
-  for (const { index, type, ids, kind, gid, reason } of endpoints) {
-    if (kind === EndpointKind.start) {
-      if (start !== undefined) {
-        if (index !== start) {
-          const participatingIds = Object.entries(idMap)
-            .filter(([, value]) => value > 0)
-            .map(([key]) => key);
-          subMatches.push({
-            start,
-            end: index,
-            type: types.findIndex((x) => x > 0),
-            ids: participatingIds,
-            gid,
-            reason,
-          });
-        }
-      }
-      ids.forEach((id) => (idMap[id] = (idMap[id] || 0) + 1));
-      types[type]++;
-      start = index;
-    }
-    if (kind === EndpointKind.end) {
-      if (index !== start) {
-        const participatingIds = Object.entries(idMap)
-          .filter(([, value]) => value > 0)
-          .map(([key]) => key);
-        subMatches.push({
-          start,
-          end: index,
-          type: types.findIndex((x) => x > 0),
-          ids: participatingIds,
-          gid,
-          reason,
-        });
-      }
-      ids.forEach((id) => (idMap[id] = (idMap[id] || 0) - 1));
-      types[type]--;
-      start =
-        Object.entries(idMap).filter(([, value]) => value > 0).length === 0
-          ? undefined
-          : index;
-    }
-  }
-  const result: Match[] = subMatches.slice(1).reduce(
-    (prev: Match[], curr: Match) => {
-      const last = prev[prev.length - 1];
+	const subMatches: Match[] = [];
+	const idMap: { [key: string]: number } = {};
+	const types: number[] = [0, 0, 0, 0];
+	let start: number;
+	for (const { index, type, ids, kind, gid, reason } of endpoints) {
+		if (kind === EndpointKind.start) {
+			if (start !== undefined) {
+				if (index !== start) {
+					const participatingIds = Object.entries(idMap)
+						.filter(([, value]) => value > 0)
+						.map(([key]) => key);
+					subMatches.push({
+						start,
+						end: index,
+						type: types.findIndex(x => x > 0),
+						ids: participatingIds,
+						gid,
+						reason,
+					});
+				}
+			}
+			ids.forEach(id => (idMap[id] = (idMap[id] || 0) + 1));
+			types[type]++;
+			start = index;
+		}
+		if (kind === EndpointKind.end) {
+			if (index !== start) {
+				const participatingIds = Object.entries(idMap)
+					.filter(([, value]) => value > 0)
+					.map(([key]) => key);
+				subMatches.push({ start, end: index, type: types.findIndex(x => x > 0), ids: participatingIds, gid, reason });
+			}
+			ids.forEach(id => (idMap[id] = (idMap[id] || 0) - 1));
+			types[type]--;
+			start = Object.entries(idMap).filter(([, value]) => value > 0).length === 0 ? undefined : index;
+		}
+	}
+
+	const result: Match[] = subMatches.slice(1).reduce(
+		(prev: Match[], curr: Match) => {
+			const last = prev[prev.length - 1];
 
       if (
         last.type === curr.type &&
