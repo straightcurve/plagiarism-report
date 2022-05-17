@@ -273,6 +273,10 @@ export class ReportService implements OnDestroy {
       ...batch.map((r) => ({ ...r, type: EResultPreviewType.Batch })),
     ];
 
+		if (completeResult.filters && completeResult.filters.resultIds) {
+			this.setHiddenResults(completeResult.filters.resultIds);
+		}
+
     previews
       .sort((a, b) => a.matchedWords - b.matchedWords)
       .forEach((preview) => this.addPreview(preview));
@@ -326,12 +330,28 @@ export class ReportService implements OnDestroy {
   }
 
   /**
-   * Pushes a new list of `ids` to the hidden results observer
-   * @param ids the ids to hide
-   */
-  public setHiddenResults(ids: string[]) {
-    this.copyleaksService.setFilteredResultsIds(ids);
-  }
+	 * Pushes a new list of `ids` to the hidden results observer
+	 * @param ids the ids to hide
+	 */
+	public setHiddenResults(ids: string[]) {
+		const currentCompleteResult = this._completeResult?.value;
+		let aggregatedScore = null;
+		if (currentCompleteResult) {
+			const statistics = helpers.calculateStatistics(
+				currentCompleteResult,
+				this._results.value.filter(r => !ids.includes(r.id)),
+				{
+					showIdentical: true,
+					showMinorChanges: true,
+					showPageSources: true,
+					showOnlyTopResults: false,
+					showRelated: true,
+				}
+			);
+			aggregatedScore = statistics.aggregatedScore;
+		}
+		this.copyleaksService.setFilteredResultsIds(ids, aggregatedScore);
+	}
 
   /**
    * Pushes a new `event` to the help-click observer, indicating the help button was clicked

@@ -1,14 +1,15 @@
 import { TestBed } from "@angular/core/testing";
 import { ReportService } from "./report.service";
 
-import { Match } from "../models";
-import * as helpers from "../utils/statistics";
-describe("StatisticsService", () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [ReportService],
-    });
-  });
+import { Match } from '../models';
+import * as helpers from '../utils/statistics';
+describe('StatisticsService', () => {
+	beforeEach(() => {
+		TestBed.configureTestingModule({
+			providers: [ReportService],
+			teardown: { destroyAfterEach: false },
+		});
+	});
 
   describe("merge intervals", () => {
     it("should merge the following intervals based on type - lower is better", () => {

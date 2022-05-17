@@ -1,39 +1,18 @@
-import {
-  AfterContentInit,
-  ContentChildren,
-  Directive,
-  Host,
-  OnDestroy,
-  QueryList,
-} from "@angular/core";
-import {
-  distinctUntilChanged,
-  filter,
-  take,
-  withLatestFrom,
-} from "rxjs/operators";
-import { untilDestroy } from "../../../shared/operators/untilDestroy";
-import {
-  HighlightService,
-  TextMatchHighlightEvent,
-} from "../../services/highlight.service";
-import { ReportService } from "../../services/report.service";
-import * as helpers from "../../utils/highlight-helpers";
-import { MatchComponent } from "../match/match.component";
-import { OriginalComponent } from "../original/original.component";
+import { AfterContentInit, ContentChildren, Directive, Input, OnDestroy, QueryList } from '@angular/core';
+import { distinctUntilChanged, filter, take, withLatestFrom } from 'rxjs/operators';
+import { untilDestroy } from '../../../shared/operators/untilDestroy';
+import { HighlightService, TextMatchHighlightEvent } from '../../services/highlight.service';
+import { ReportService } from '../../services/report.service';
+import * as helpers from '../../utils/highlight-helpers';
+import { MatchComponent } from '../match/match.component';
 
 @Directive({
   selector: "[crOriginalTextHelper]",
 })
-export class OriginalTextHelperDirective
-  implements AfterContentInit, OnDestroy
-{
-  private lastSelectedOriginalTextMatch: TextMatchHighlightEvent;
-  constructor(
-    @Host() private host: OriginalComponent,
-    private reportService: ReportService,
-    private highlightService: HighlightService
-  ) {}
+export class OriginalTextHelperDirective implements AfterContentInit, OnDestroy {
+	@Input() public host: { textMatches: any; currentPage: number };
+	private lastSelectedOriginalTextMatch: TextMatchHighlightEvent;
+	constructor(private reportService: ReportService, private highlightService: HighlightService) {}
 
   @ContentChildren(MatchComponent)
   private children: QueryList<MatchComponent>;
@@ -122,36 +101,25 @@ export class OriginalTextHelperDirective
         this.lastSelectedOriginalTextMatch = textMatchClickEvent;
       });
 
-    viewMode$
-      .pipe(
-        distinctUntilChanged(),
-        untilDestroy(this),
-        withLatestFrom(contentMode$),
-        filter(
-          ([view, content]) =>
-            this.lastSelectedOriginalTextMatch &&
-            view === "one-to-many" &&
-            content === "text"
-        )
-      )
-      .subscribe((_) => {
-        setTimeout(() => {
-          const start = this.lastSelectedOriginalTextMatch.elem.match.start;
-          const end = this.lastSelectedOriginalTextMatch.elem.match.end;
-          const comp = this.children.find(
-            (item) => item.match.start === start && item.match.end === end
-          );
-          if (comp === null) {
-            throw new Error("Match component was not found in view");
-          }
-          this.highlightService.textMatchClicked({
-            elem: comp,
-            broadcast: false,
-            origin: "original",
-          });
-        }, 100);
-      });
-  }
+		viewMode$
+			.pipe(
+				distinctUntilChanged(),
+				untilDestroy(this),
+				withLatestFrom(contentMode$),
+				filter(([view, content]) => this.lastSelectedOriginalTextMatch && view === 'one-to-many' && content === 'text')
+			)
+			.subscribe(_ => {
+				setTimeout(() => {
+					const start = this.lastSelectedOriginalTextMatch?.elem?.match?.start;
+					const end = this.lastSelectedOriginalTextMatch?.elem?.match?.end;
+					const comp = this.children.find(item => item.match.start === start && item.match.end === end);
+					if (comp === null) {
+						throw new Error('Match component was not found in view');
+					}
+					this.highlightService.textMatchClicked({ elem: comp, broadcast: false, origin: 'original' });
+				}, 100);
+			});
+	}
 
   /**
    * Life-cycle method

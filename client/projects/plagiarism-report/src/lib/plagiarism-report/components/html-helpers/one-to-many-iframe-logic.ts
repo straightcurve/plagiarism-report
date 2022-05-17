@@ -154,14 +154,14 @@ function ready() {
     messageParent({ type: "match-select", index: +current.dataset.index });
   }
 
-  /**
-   * Event handler for the default `mouseenter` or `mouseleave` event
-   * @param event the default mouse event object
-   */
-  function onMatchHover(event: MouseEvent): void {
-    const elem = event.target as HTMLSpanElement;
-    elem.classList.toggle("hover");
-  }
+	/**
+	 * Event handler for the default `mouseenter` or `mouseleave` event
+	 * @param event the default mouse event object
+	 */
+	function onMatchHover(event: MouseEvent): void {
+		const elem = event?.target as HTMLSpanElement;
+		elem?.classList?.toggle('hover');
+	}
 }
 
 export default `(${onDocumentReady.toString()})(${ready.toString()})`;

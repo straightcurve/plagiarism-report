@@ -49,16 +49,16 @@ import { IScanSummeryComponent } from "../../models/ScanProperties";
 export class PropertiesComponent implements OnInit, OnDestroy {
   @HostBinding("class.mobile") isMobile: boolean;
 
-  @Input()
-  public scanSummaryComponent: Type<IScanSummeryComponent> | undefined;
-  @Input()
-  public isDownloading = false;
-  @Input()
-  public hideCreationTime = false;
-  @Input()
-  public expanded = true;
-  @Output()
-  public expandChange = new EventEmitter();
+	@Input()
+	public scanSummaryComponent: Type<IScanSummeryComponent>;
+	@Input()
+	public isPDFDownloading = false;
+	@Input()
+	public hideCreationTime = false;
+	@Input()
+	public expanded = true;
+	@Output()
+	public expandChange = new EventEmitter();
 
   public options: CopyleaksReportOptions;
   public stats: ReportStatistics;
@@ -88,16 +88,13 @@ export class PropertiesComponent implements OnInit, OnDestroy {
   messages: CopyleaksTextConfig = DEFAULT_TEXT_CONFIG;
   translations: CopyleaksTranslations;
 
-  get btnDownloadTooltip() {
-    if (this.isDownloading) {
-      return "downloading...";
-    } else {
-      return (
-        this.translations?.SCAN_PROPERTIES_SECTION?.ACTIONS?.DOWNLOAD ||
-        "Download"
-      );
-    }
-  }
+	get btnDownloadTooltip() {
+		if (this.isPDFDownloading) {
+			return this.translations?.SCAN_PROPERTIES_SECTION?.ACTIONS?.DOWNLOADING || 'Downloading...';
+		} else {
+			return this.translations?.SCAN_PROPERTIES_SECTION?.ACTIONS?.DOWNLOAD || 'Download';
+		}
+	}
 
   @ViewChild("scanSummeryComponentVcr", {
     read: ViewContainerRef,
