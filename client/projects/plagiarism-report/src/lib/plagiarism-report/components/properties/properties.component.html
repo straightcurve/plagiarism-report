@@ -1,460 +1,269 @@
-<cr-expansion-panel
-  [expanded]="expanded"
-  (expandChange)="onExpandChange($event)"
->
-  <cr-expansion-panel-title>
-    {{ translations?.SCAN_PROPERTIES_SECTION?.TITLE || "SCAN PROPERTIES" }}
-  </cr-expansion-panel-title>
-  <cr-expansion-panel-menu>
-    <cr-expansion-panel-menu-item *ngIf="help">
-      <button
-        mat-button
-        [matTooltip]="
-          translations?.SCAN_PROPERTIES_SECTION?.ACTIONS?.HELP || 'Help'
-        "
-        (click)="helpClicked($event)"
-      >
-        <mat-icon>help_outline</mat-icon>
-      </button>
-    </cr-expansion-panel-menu-item>
-    <cr-expansion-panel-menu-item *ngIf="share">
-      <button
-        mat-button
-        [matTooltip]="
-          translations?.SCAN_PROPERTIES_SECTION?.ACTIONS?.SHARE || 'Share'
-        "
-        (click)="shareClicked($event)"
-      >
-        <mat-icon>share</mat-icon>
-      </button>
-    </cr-expansion-panel-menu-item>
-    <cr-expansion-panel-menu-item *ngIf="download">
-      <button
-        mat-button
-        [disabled]="isDownloading"
-        (click)="downloadClicked($event)"
-      >
-        <mat-icon [matTooltip]="btnDownloadTooltip">save_alt</mat-icon>
-      </button>
-    </cr-expansion-panel-menu-item>
-    <cr-expansion-panel-menu-item>
-      <button
-        mat-button
-        [matTooltip]="
-          translations?.SCAN_PROPERTIES_SECTION?.ACTIONS?.SETTINGS || 'Settings'
-        "
-        (click)="openSettingsDialog()"
-      >
-        <mat-icon>settings</mat-icon>
-      </button>
-    </cr-expansion-panel-menu-item>
-  </cr-expansion-panel-menu>
-  <cr-expansion-panel-body fxLayout="row nowrap">
-    <!-- PROGRESS -->
-    <div prop>
-      <ng-container>
-        <!--  -->
-        <ng-container #scanSummeryComponentVcr></ng-container>
-        <!--  -->
-        <ng-container *ngIf="!scanSummeryComponentInstance">
-          <div
-            fxLayout="row nowrap"
-            fxLayoutAlign="center center"
-            fxLayoutGap="1em"
-          >
-            <div
-              fxLayout="
+<cr-expansion-panel [expanded]="expanded" (expandChange)="onExpandChange($event)">
+	<cr-expansion-panel-title>
+		{{ translations?.SCAN_PROPERTIES_SECTION?.TITLE || 'SCAN PROPERTIES' }}
+	</cr-expansion-panel-title>
+	<cr-expansion-panel-menu>
+		<cr-expansion-panel-menu-item *ngIf="help">
+			<button
+				mat-button
+				[matTooltip]="translations?.SCAN_PROPERTIES_SECTION?.ACTIONS?.HELP || 'Help'"
+				(click)="helpClicked($event)">
+				<mat-icon>help_outline</mat-icon>
+			</button>
+		</cr-expansion-panel-menu-item>
+		<cr-expansion-panel-menu-item *ngIf="share">
+			<button
+				mat-button
+				[matTooltip]="translations?.SCAN_PROPERTIES_SECTION?.ACTIONS?.SHARE || 'Share'"
+				(click)="shareClicked($event)">
+				<mat-icon>share</mat-icon>
+			</button>
+		</cr-expansion-panel-menu-item>
+		<cr-expansion-panel-menu-item *ngIf="download">
+			<button mat-button [disabled]="isPDFDownloading" (click)="downloadClicked($event)">
+				<mat-icon [matTooltip]="btnDownloadTooltip">save_alt</mat-icon>
+			</button>
+		</cr-expansion-panel-menu-item>
+		<cr-expansion-panel-menu-item>
+			<button
+				mat-button
+				[matTooltip]="translations?.SCAN_PROPERTIES_SECTION?.ACTIONS?.SETTINGS || 'Settings'"
+				(click)="openSettingsDialog()">
+				<mat-icon>settings</mat-icon>
+			</button>
+		</cr-expansion-panel-menu-item>
+	</cr-expansion-panel-menu>
+	<cr-expansion-panel-body fxLayout="row nowrap">
+		<!-- PROGRESS -->
+		<div prop>
+			<ng-container>
+				<!--  -->
+				<ng-container #scanSummeryComponentVcr></ng-container>
+				<!--  -->
+				<ng-container *ngIf="!scanSummeryComponentInstance">
+					<div fxLayout="row nowrap" fxLayoutAlign="center center" fxLayoutGap="1em">
+						<div
+							fxLayout="
 					 row
 					 nowrap"
-              *ngIf="!done"
-              fxLayoutAlign="center center"
-            >
-              <div header>&zwnj;</div>
-              <mat-spinner [diameter]="40"></mat-spinner>
-            </div>
-            <div>
-              <div header>
-                <ng-container
-                  *ngIf="
-                    !done &&
-                    progress !== null &&
-                    !(scanSummaryComponent && progress == 100)
-                  "
-                >
-                  {{ progress && progress / 100 | percent: "1.0" }}
-                </ng-container>
-                <ng-container *ngIf="done">
-                  {{
-                    translations?.SCAN_PROPERTIES_SECTION?.SCANNING?.DONE ||
-                      "done"
-                  }}
-                </ng-container>
-              </div>
-            </div>
-          </div>
-          <div>
-            <ng-container *ngIf="isScanning && !done">
-              {{
-                translations?.SCAN_PROPERTIES_SECTION?.SCANNING?.PROGRESS ||
-                  "Scanning"
-              }}...
-            </ng-container>
-            <ng-container *ngIf="!isScanning && !done">
-              {{
-                translations?.SCAN_PROPERTIES_SECTION?.SCANNING?.LOADING ||
-                  "Loading"
-              }}...
-            </ng-container>
-            <ng-container *ngIf="done">
-              <div
-                *ngIf="metadata"
-                [matTooltip]="
-                  (metadata.scannedDocument.creationTime
-                    | date: 'MMMM d, y, h:mm:ss a') || 'Unknown'
-                "
-                [matTooltipDisabled]="hideCreationTime"
-              >
-                {{
-                  translations?.SCAN_PROPERTIES_SECTION?.SCANNING?.SCANNED ||
-                    "Scanned"
-                }}
-                <ng-container *ngIf="!hideCreationTime">
-                  {{ metadata.scannedDocument.creationTime | timeAgo }}
-                </ng-container>
-              </div>
-              <!--  -->
-            </ng-container>
-          </div>
-        </ng-container>
-      </ng-container>
-    </div>
+							*ngIf="!done"
+							fxLayoutAlign="center center">
+							<div header>&zwnj;</div>
+							<mat-spinner [diameter]="40"></mat-spinner>
+						</div>
+						<div>
+							<div header>
+								<ng-container *ngIf="!done && progress !== null && !(scanSummaryComponent && progress == 100)">
+									{{ progress && progress / 100 | percent: '1.0' }}
+								</ng-container>
+								<ng-container *ngIf="done">
+									{{ translations?.SCAN_PROPERTIES_SECTION?.SCANNING?.DONE || 'done' }}
+								</ng-container>
+							</div>
+						</div>
+					</div>
+					<div>
+						<ng-container *ngIf="isScanning && !done">
+							{{ translations?.SCAN_PROPERTIES_SECTION?.SCANNING?.PROGRESS || 'Scanning' }}...
+						</ng-container>
+						<ng-container *ngIf="!isScanning && !done">
+							{{ translations?.SCAN_PROPERTIES_SECTION?.SCANNING?.LOADING || 'Loading' }}...
+						</ng-container>
+						<ng-container *ngIf="done">
+							<div
+								*ngIf="metadata"
+								[matTooltip]="metadata?.scannedDocument.creationTime | date: 'MMMM d, y, h:mm:ss a'"
+								[matTooltipDisabled]="hideCreationTime">
+								{{ translations?.SCAN_PROPERTIES_SECTION?.SCANNING?.SCANNED || 'Scanned' }}
+								<ng-container *ngIf="!hideCreationTime">
+									{{ metadata?.scannedDocument.creationTime | timeAgo }}
+								</ng-container>
+							</div>
+							<!--  -->
+						</ng-container>
+					</div>
+				</ng-container>
+			</ng-container>
+		</div>
 
-    <!-- RESULTS FOUND -->
-    <!-- [style.color]="hiddenResultsCount? '#ff8400' : ''" -->
-    <div
-      prop
-      [style.cursor]="isAlertsView ? 'pointer' : ''"
-      (click)="isAlertsView && showScanningResult()"
-    >
-      <div id="cr-hint-results-found"></div>
-      <div
-        header
-        [matTooltip]="
-          resultsFound >= 1000
-            ? (resultsFound | number) + ' results'
-            : resultsFound + ' results'
-        "
-      >
-        <span>{{ resultsFound | shortNumber: 1 }}</span>
-        <ng-container
-          *ngIf="resultsFound < totalViewedResults && isShowingOnlyTopResults"
-          >+</ng-container
-        >
-      </div>
-      <div
-        [matTooltip]="
-          hiddenResultsCount
-            ? hiddenResultsCount +
-              ' ' +
-              (translations?.SCAN_PROPERTIES_SECTION?.RESULTS_FOUND_TOOLTIP ||
-                'Results have been filtered')
-            : ''
-        "
-      >
-        {{
-          translations?.SCAN_PROPERTIES_SECTION?.RESULTS_FOUND ||
-            "results found"
-        }}
-        <span *ngIf="hiddenResultsCount" style="color: red">*</span>
-      </div>
+		<!-- RESULTS FOUND -->
+		<!-- [style.color]="hiddenResultsCount? '#ff8400' : ''" -->
+		<div prop [style.cursor]="isAlertsView ? 'pointer' : ''" (click)="isAlertsView && showScanningResult()">
+			<div id="cr-hint-results-found"></div>
+			<div header [matTooltip]="resultsFound >= 1000 ? (resultsFound | number) + ' results' : null">
+				<span>{{ resultsFound | shortNumber: 1 }}</span>
+				<ng-container *ngIf="resultsFound < totalViewedResults && isShowingOnlyTopResults">+</ng-container>
+			</div>
+			<div
+				[matTooltip]="
+					hiddenResultsCount
+						? hiddenResultsCount +
+						  ' ' +
+						  (translations?.SCAN_PROPERTIES_SECTION?.RESULTS_FOUND_TOOLTIP || 'Results have been filtered')
+						: null
+				">
+				{{ translations?.SCAN_PROPERTIES_SECTION?.RESULTS_FOUND || 'results found' }}
+				<span *ngIf="hiddenResultsCount" style="color: red">*</span>
+			</div>
 
-      <div
-        *ngIf="resultsFound < totalViewedResults && isShowingOnlyTopResults"
-        class="show-all-result"
-        (click)="showAllResults()"
-      >
-        Show All
-      </div>
-    </div>
+			<div
+				*ngIf="resultsFound < totalViewedResults && isShowingOnlyTopResults"
+				class="show-all-result"
+				(click)="showAllResults()">
+				Show All
+			</div>
+		</div>
 
-    <!-- # COPIED WORDS -->
-    <div
-      prop
-      *ngIf="stats && !previewsLoading; else skeleton__prop"
-      [matTooltip]="
-        total +
-        ' ' +
-        (translations?.SCAN_PROPERTIES_SECTION?.SIMILAR_WORDS_TOOPTIP ||
-          'submitted words')
-      "
-    >
-      <div header>
-        {{ combined | shortNumber: 1 }}
-      </div>
-      <div>
-        {{
-          translations?.SCAN_PROPERTIES_SECTION?.SIMILAR_WORDS ||
-            "similar words"
-        }}
-      </div>
-    </div>
+		<!-- # COPIED WORDS -->
+		<div
+			prop
+			*ngIf="stats && !previewsLoading; else skeleton__prop"
+			[matTooltip]="total + ' ' + (translations?.SCAN_PROPERTIES_SECTION?.SIMILAR_WORDS_TOOPTIP || 'submitted words')">
+			<div header>
+				{{ combined | shortNumber: 1 }}
+			</div>
+			<div>{{ translations?.SCAN_PROPERTIES_SECTION?.SIMILAR_WORDS || 'similar words' }}</div>
+		</div>
 
-    <!-- STATS -->
-    <div
-      stats
-      [fxFlexOrder.lt-md]="-5"
-      fxLayout="row nowrap"
-      fxLayoutAlign="stretch stretch"
-    >
-      <ng-container *ngIf="stats && !previewsLoading; else skeleton__stats">
-        <ngx-charts-pie-chart
-          fxHide.lt-md
-          [customColors]="customColors"
-          [results]="chartData"
-          [view]="[150, 150]"
-        >
-          <ng-template #tooltipTemplate let-model="model">
-            <div style="padding: 0.5em" class="mat-typography">
-              <span style="font-size: 1em; display: block">{{
-                model.value | number
-              }}</span>
-              <span tooltip-text>
-                <ng-container [ngSwitch]="model.name">
-                  <ng-container *ngSwitchCase="'Identical'">
-                    {{
-                      translations?.SHARED?.MATCH_TYPES?.IDENTICAL || model.name
-                    }}
-                  </ng-container>
-                  <ng-container *ngSwitchCase="'Minor changes'">
-                    {{
-                      translations?.SHARED?.MATCH_TYPES?.MINOR_CHANGES ||
-                        model.name
-                    }}
-                  </ng-container>
-                  <ng-container *ngSwitchCase="'Related meaning'">
-                    {{
-                      translations?.SHARED?.MATCH_TYPES?.RELATED_MEANING ||
-                        "Paraphrased"
-                    }}
-                  </ng-container>
-                  <ng-container *ngSwitchCase="'Original'">
-                    {{
-                      translations?.SHARED?.MATCH_TYPES?.ORIGINAL || model.name
-                    }}
-                  </ng-container>
-                  <ng-container *ngSwitchDefault>
-                    {{ model.name }}
-                  </ng-container>
-                </ng-container>
-                {{ translations?.SHARED?.WORDS || "words" }}
-              </span>
-            </div>
-          </ng-template>
-        </ngx-charts-pie-chart>
+		<!-- STATS -->
+		<div stats [fxFlexOrder.lt-md]="-5" fxLayout="row nowrap" fxLayoutAlign="stretch stretch">
+			<ng-container *ngIf="stats && !previewsLoading; else skeleton__stats">
+				<ngx-charts-pie-chart fxHide.lt-md [customColors]="customColors" [results]="chartData" [view]="[150, 150]">
+					<ng-template #tooltipTemplate let-model="model">
+						<div style="padding: 0.5em" class="mat-typography">
+							<span style="font-size: 1em; display: block">{{ model.value | number }}</span>
+							<span tooltip-text>
+								<ng-container [ngSwitch]="model.name">
+									<ng-container *ngSwitchCase="'Identical'">
+										{{ translations?.SHARED?.MATCH_TYPES?.IDENTICAL || model.name }}
+									</ng-container>
+									<ng-container *ngSwitchCase="'Minor changes'">
+										{{ translations?.SHARED?.MATCH_TYPES?.MINOR_CHANGES || model.name }}
+									</ng-container>
+									<ng-container *ngSwitchCase="'Related meaning'">
+										{{ translations?.SHARED?.MATCH_TYPES?.RELATED_MEANING || 'Paraphrased' }}
+									</ng-container>
+									<ng-container *ngSwitchCase="'Original'">
+										{{ translations?.SHARED?.MATCH_TYPES?.ORIGINAL || model.name }}
+									</ng-container>
+									<ng-container *ngSwitchDefault>
+										{{ model.name }}
+									</ng-container>
+								</ng-container>
+								{{ translations?.SHARED?.WORDS || 'words' }}
+							</span>
+						</div>
+					</ng-template>
+				</ngx-charts-pie-chart>
 
-        <div
-          legend
-          fxLayout="column"
-          fxFlex
-          fxLayoutAlign="space-evenly stretch"
-        >
-          <div
-            row
-            id="cr-hint-identical"
-            (click)="toggleComparison('showIdentical')"
-            [matTooltip]="
-              options?.showIdentical
-                ? translations?.SHARED?.MATCH_TYPES?.IDENTICAL_TOOLTIP ||
-                  messages.IDENTICAL_TOOLTIP_TEXT
-                : translations?.SHARED?.MATCH_TYPES
-                    ?.OMITTED_MATCH_TOOLTIP_TEXT ||
-                  messages.MATCH_TYPE_OMITTED_TOOLTIP_TEXT
-            "
-            fxLayout="row"
-            fxLayoutAlign="start center"
-            fxLayoutGap="0.5em"
-          >
-            <div
-              class="dot identical"
-              [ngStyle]="{
-                visibility: options?.showIdentical ? 'visible' : 'hidden'
-              }"
-            ></div>
-            <div
-              text
-              [ngClass]="{
-                'cr-strike-out': !options?.showIdentical
-              }"
-            >
-              {{ translations?.SHARED?.MATCH_TYPES?.IDENTICAL || "Identical" }}
-            </div>
-            <span fxFlex></span>
+				<div legend fxLayout="column" fxFlex fxLayoutAlign="space-evenly stretch">
+					<div
+						row
+						id="cr-hint-identical"
+						(click)="toggleComparison('showIdentical')"
+						[matTooltip]="
+							options?.showIdentical
+								? translations?.SHARED?.MATCH_TYPES?.IDENTICAL_TOOLTIP || messages.IDENTICAL_TOOLTIP_TEXT
+								: translations?.SHARED?.MATCH_TYPES?.OMITTED_MATCH_TOOLTIP_TEXT ||
+								  messages.MATCH_TYPE_OMITTED_TOOLTIP_TEXT
+						"
+						fxLayout="row"
+						fxLayoutAlign="start center"
+						fxLayoutGap="0.5em">
+						<div class="dot identical" [ngStyle]="{ visibility: options?.showIdentical ? 'visible' : 'hidden' }"></div>
+						<div text [ngClass]="{ 'cr-strike-out': !options?.showIdentical }">
+							{{ translations?.SHARED?.MATCH_TYPES?.IDENTICAL || 'Identical' }}
+						</div>
+						<span fxFlex></span>
 
-            <div
-              *ngIf="
-                stats &&
-                stats.total &&
-                stats.total > 0 &&
-                (options.showIdentical || stats.identical > 0)
-              "
-            >
-              {{ stats.identical / stats.total | similarity: "1.0-1" }}
-            </div>
-          </div>
-          <mat-divider></mat-divider>
-          <div
-            row
-            (click)="toggleComparison('showMinorChanges')"
-            [matTooltip]="
-              options?.showMinorChanges
-                ? translations?.SHARED?.MATCH_TYPES?.MINOR_CHANGES_TOOLTIP ||
-                  messages.MINOR_CHANGES_TOOLTIP_TEXT
-                : translations?.SHARED?.MATCH_TYPES
-                    ?.OMITTED_MATCH_TOOLTIP_TEXT ||
-                  messages.MATCH_TYPE_OMITTED_TOOLTIP_TEXT
-            "
-            fxLayout="row"
-            fxLayoutAlign="center center"
-            fxLayoutGap="0.5em"
-          >
-            <div
-              class="dot minor-changes"
-              [ngStyle]="{
-                visibility: options?.showMinorChanges ? 'visible' : 'hidden'
-              }"
-            ></div>
-            <div
-              text
-              [ngClass]="{
-                'cr-strike-out': options?.showMinorChanges !== true
-              }"
-            >
-              {{
-                translations?.SHARED?.MATCH_TYPES?.MINOR_CHANGES ||
-                  "Minor Changes"
-              }}
-            </div>
-            <span fxFlex></span>
-            <div
-              *ngIf="
-                stats &&
-                stats.total &&
-                stats.total > 0 &&
-                (options.showMinorChanges || stats.minorChanges > 0)
-              "
-            >
-              {{ stats.minorChanges / stats.total | percent: "1.0-1" }}
-            </div>
-          </div>
-          <mat-divider></mat-divider>
-          <div
-            row
-            (click)="toggleComparison('showRelated')"
-            [matTooltip]="
-              options?.showRelated
-                ? translations?.SHARED?.MATCH_TYPES?.RELATED_MEANING_TOOLTIP ||
-                  messages.RELATED_MEANING_TOOLTIP_TEXT
-                : translations?.SHARED?.MATCH_TYPES
-                    ?.OMITTED_MATCH_TOOLTIP_TEXT ||
-                  messages.MATCH_TYPE_OMITTED_TOOLTIP_TEXT
-            "
-            fxLayout="row"
-            fxLayoutAlign="start center"
-            fxLayoutGap="0.5em"
-          >
-            <div
-              class="dot related"
-              [ngStyle]="{
-                visibility: options?.showRelated ? 'visible' : 'hidden'
-              }"
-            ></div>
-            <div
-              text
-              [ngClass]="{
-                'cr-strike-out': options?.showRelated !== true
-              }"
-            >
-              {{
-                translations?.SHARED?.MATCH_TYPES?.RELATED_MEANING ||
-                  "Paraphrased"
-              }}
-            </div>
-            <span fxFlex></span>
-            <div
-              *ngIf="
-                stats &&
-                stats.total &&
-                stats.total > 0 &&
-                (options.showRelated || stats.relatedMeaning > 0)
-              "
-            >
-              {{ stats.relatedMeaning / stats.total | percent: "1.0-1" }}
-            </div>
-          </div>
-          <mat-divider></mat-divider>
-          <div
-            [matTooltip]="
-              translations?.SHARED?.MATCH_TYPES?.OMITTED_WORDS_TOOLTIP ||
-              messages.OMITTED_WORDS_TOOLTIP_TEXT
-            "
-            row
-            fxLayout="row"
-            fxLayoutAlign="start center"
-            fxLayoutGap="0.5em"
-          >
-            <div class="dot omitted"></div>
-            <div text>
-              {{
-                translations?.SHARED?.MATCH_TYPES?.OMITTED_WORDS ||
-                  "Omitted Words"
-              }}
-            </div>
-            <span fxFlex></span>
-            <div *ngIf="stats && stats.total && stats.total > 0">
-              {{
-                metadata.scannedDocument.totalExcluded / stats.total
-                  | percent: "1.0-1"
-              }}
-            </div>
-          </div>
-        </div>
+						<div *ngIf="options.showIdentical || stats.identical > 0">
+							{{ stats?.identical / stats?.total | similarity: '1.0-1' }}
+						</div>
+					</div>
+					<mat-divider></mat-divider>
+					<div
+						row
+						(click)="toggleComparison('showMinorChanges')"
+						[matTooltip]="
+							options?.showMinorChanges
+								? translations?.SHARED?.MATCH_TYPES?.MINOR_CHANGES_TOOLTIP || messages.MINOR_CHANGES_TOOLTIP_TEXT
+								: translations?.SHARED?.MATCH_TYPES?.OMITTED_MATCH_TOOLTIP_TEXT ||
+								  messages.MATCH_TYPE_OMITTED_TOOLTIP_TEXT
+						"
+						fxLayout="row"
+						fxLayoutAlign="center center"
+						fxLayoutGap="0.5em">
+						<div
+							class="dot minor-changes"
+							[ngStyle]="{ visibility: options?.showMinorChanges ? 'visible' : 'hidden' }"></div>
+						<div text [ngClass]="{ 'cr-strike-out': options?.showMinorChanges !== true }">
+							{{ translations?.SHARED?.MATCH_TYPES?.MINOR_CHANGES || 'Minor Changes' }}
+						</div>
+						<span fxFlex></span>
+						<div *ngIf="options.showMinorChanges || stats.minorChanges > 0">
+							{{ stats?.minorChanges / stats?.total | percent: '1.0-1' }}
+						</div>
+					</div>
+					<mat-divider></mat-divider>
+					<div
+						row
+						(click)="toggleComparison('showRelated')"
+						[matTooltip]="
+							options?.showRelated
+								? translations?.SHARED?.MATCH_TYPES?.RELATED_MEANING_TOOLTIP || messages.RELATED_MEANING_TOOLTIP_TEXT
+								: translations?.SHARED?.MATCH_TYPES?.OMITTED_MATCH_TOOLTIP_TEXT ||
+								  messages.MATCH_TYPE_OMITTED_TOOLTIP_TEXT
+						"
+						fxLayout="row"
+						fxLayoutAlign="start center"
+						fxLayoutGap="0.5em">
+						<div class="dot related" [ngStyle]="{ visibility: options?.showRelated ? 'visible' : 'hidden' }"></div>
+						<div text [ngClass]="{ 'cr-strike-out': options?.showRelated !== true }">
+							{{ translations?.SHARED?.MATCH_TYPES?.RELATED_MEANING || 'Paraphrased' }}
+						</div>
+						<span fxFlex></span>
+						<div *ngIf="options.showRelated || stats.relatedMeaning > 0">
+							{{ stats?.relatedMeaning / stats?.total | percent: '1.0-1' }}
+						</div>
+					</div>
+					<mat-divider></mat-divider>
+					<div
+						[matTooltip]="
+							translations?.SHARED?.MATCH_TYPES?.OMITTED_WORDS_TOOLTIP || messages.OMITTED_WORDS_TOOLTIP_TEXT
+						"
+						row
+						fxLayout="row"
+						fxLayoutAlign="start center"
+						fxLayoutGap="0.5em">
+						<div class="dot omitted"></div>
+						<div text>
+							{{ translations?.SHARED?.MATCH_TYPES?.OMITTED_WORDS || 'Omitted Words' }}
+						</div>
+						<span fxFlex></span>
+						<div>
+							{{ stats && metadata.scannedDocument.totalExcluded / stats?.total | percent: '1.0-1' }}
+						</div>
+					</div>
+				</div>
 
-        <ng-template #statsSpinner>
-          <mat-spinner
-            *ngIf="!stats"
-            [diameter]="16"
-            style="display: inline-block"
-          ></mat-spinner>
-        </ng-template>
-      </ng-container>
-    </div>
+				<ng-template #statsSpinner>
+					<mat-spinner *ngIf="!stats" [diameter]="16" style="display: inline-block"></mat-spinner>
+				</ng-template>
+			</ng-container>
+		</div>
 
-    <!-- % MATCH -->
-    <div
-      prop
-      id="cr-hint-results-score"
-      *ngIf="stats && !previewsLoading; else skeleton__prop"
-      [ngClass]="{
-        low: score <= 0.1,
-        medium: score > 0.1 && score <= 0.5,
-        high: score > 0.5
-      }"
-    >
-      <div header>
-        {{ score | percent: "1.0-1" }}
-      </div>
-      <div
-        [matTooltip]="
-          isShowingPartialStats
-            ? 'Some matches are ommited according to your settings'
-            : ''
-        "
-      >
-        <span
-          >{{ translations?.SCAN_PROPERTIES_SECTION?.MATCH || "match"
-          }}{{ isShowingPartialStats ? "*" : "" }}</span
-        >
-      </div>
+		<!-- % MATCH -->
+		<div
+			prop
+			id="cr-hint-results-score"
+			*ngIf="stats && !previewsLoading; else skeleton__prop"
+			[ngClass]="{ low: score <= 0.1, medium: score > 0.1 && score <= 0.5, high: score > 0.5 }">
+			<div header>
+				{{ score | percent: '1.0-1' }}
+			</div>
+			<div [matTooltip]="isShowingPartialStats ? 'Some matches are ommited according to your settings' : null">
+				<span>{{ translations?.SCAN_PROPERTIES_SECTION?.MATCH || 'match' }}{{ isShowingPartialStats ? '*' : '' }}</span>
+			</div>
 
       <ng-container>
         <cr-notifications></cr-notifications>
@@ -475,38 +284,23 @@
 </ng-template>
 
 <ng-template #skeleton__stats>
-  <div fxLayout="column">
-    <ngx-skeleton-loader
-      [theme]="{ width: '118px', height: '113px', margin: '1em' }"
-      appearance="circle"
-    ></ngx-skeleton-loader>
-  </div>
+	<div fxLayout="column">
+		<ngx-skeleton-loader
+			[theme]="{ width: '118px', height: '113px', margin: '1em' }"
+			appearance="circle"></ngx-skeleton-loader>
+	</div>
 
-  <div fxLayout="column" fxFlex fxLayoutAlign="space-evenly stretch">
-    <ng-container *ngFor="let x of 4 | array; let last = last">
-      <div
-        fxLayout="row"
-        fxLayoutGap="1em"
-        style="padding: 0em 0.5em"
-        fxLayoutAlign="center center"
-      >
-        <ngx-skeleton-loader
-          appearance="circle"
-          [theme]="{
-            width: '1.75em',
-            height: '1.75em',
-            margin: '0px'
-          }"
-        ></ngx-skeleton-loader>
-        <ngx-skeleton-loader
-          [theme]="{ margin: '0', width: '5em' }"
-        ></ngx-skeleton-loader>
-        <span fxFlex></span>
-        <ngx-skeleton-loader
-          [theme]="{ margin: '0', width: '3em' }"
-        ></ngx-skeleton-loader>
-      </div>
-      <mat-divider *ngIf="!last"></mat-divider>
-    </ng-container>
-  </div>
+	<div fxLayout="column" fxFlex fxLayoutAlign="space-evenly stretch">
+		<ng-container *ngFor="let x of 4 | array; let last = last">
+			<div fxLayout="row" fxLayoutGap="1em" style="padding: 0em 0.5em" fxLayoutAlign="center center">
+				<ngx-skeleton-loader
+					appearance="circle"
+					[theme]="{ width: '1.75em', height: '1.75em', margin: '0px' }"></ngx-skeleton-loader>
+				<ngx-skeleton-loader [theme]="{ margin: '0', width: '5em' }"></ngx-skeleton-loader>
+				<span fxFlex></span>
+				<ngx-skeleton-loader [theme]="{ margin: '0', width: '3em' }"></ngx-skeleton-loader>
+			</div>
+			<mat-divider *ngIf="!last"></mat-divider>
+		</ng-container>
+	</div>
 </ng-template>

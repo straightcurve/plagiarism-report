@@ -1,32 +1,27 @@
 import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  HostBinding,
-  Inject,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  Output,
-  Renderer2,
-  SimpleChanges,
-} from "@angular/core";
-const version = "3.1.12";
-import { untilDestroy } from "../shared/operators/untilDestroy";
-import {
-  CopyleaksReportConfig,
-  ViewMode,
-} from "./models/CopyleaksReportConfig";
-import { CopyleaksService } from "./services/copyleaks.service";
-import { DirectionService } from "./services/direction.service";
-import { HighlightService } from "./services/highlight.service";
-import { MatchService } from "./services/match.service";
-import { ReportService } from "./services/report.service";
-import {
-  EReportViewModel,
-  ViewModeService,
-} from "./services/view-mode.service";
+	Component,
+	ElementRef,
+	EventEmitter,
+	HostBinding,
+	Input,
+	OnChanges,
+	OnDestroy,
+	OnInit,
+	Output,
+	Renderer2,
+	SimpleChanges,
+} from '@angular/core';
+
+import packageInfo from '../report-version.json';
+import { untilDestroy } from '../shared/operators/untilDestroy';
+import { CopyleaksReportConfig, ViewMode } from './models/CopyleaksReportConfig';
+import { CopyleaksService } from './services/copyleaks.service';
+import { DirectionService } from './services/direction.service';
+import { HighlightService } from './services/highlight.service';
+import { MatchService } from './services/match.service';
+import { ReportService } from './services/report.service';
+import { StatisticsService } from './services/statistics.service';
+import { EReportViewModel, ViewModeService } from './services/view-mode.service';
 @Component({
   selector: "cr-copyleaks-report",
   templateUrl: "copyleaks-report.component.html",
@@ -46,13 +41,12 @@ export class CopyleaksReportComponent implements OnInit, OnDestroy, OnChanges {
     return this.viewMode === "one-to-many";
   }
 
-  @Input()
-  //@ts-ignore
-  public config: CopyleaksReportConfig;
-  @Input()
-  public isDownloading = false;
-  @Input()
-  public hideCreationTime = false;
+	@Input()
+	public config: CopyleaksReportConfig = {};
+	@Input()
+	public isPDFDownloading = false;
+	@Input()
+	public hideCreationTime = false;
 
   @Output()
   public configChange = new EventEmitter<CopyleaksReportConfig>();
@@ -80,20 +74,16 @@ export class CopyleaksReportComponent implements OnInit, OnDestroy, OnChanges {
   public reportViewMode: EReportViewModel;
   public eReportViewModel = EReportViewModel;
 
-  constructor(
-    private reportService: ReportService,
-    @Inject("CopyleaksService") private copyleaksService: CopyleaksService,
-    private viewModeService: ViewModeService,
-    private directionService: DirectionService,
-    el: ElementRef,
-    renderer: Renderer2
-  ) {
-    renderer.setAttribute(
-      el.nativeElement,
-      "plagiarism-report-version",
-      version
-    );
-  }
+	constructor(
+		private reportService: ReportService,
+		private copyleaksService: CopyleaksService,
+		private viewModeService: ViewModeService,
+		private directionService: DirectionService,
+		el: ElementRef,
+		renderer: Renderer2
+	) {
+		renderer.setAttribute(el.nativeElement, 'plagiarism-report-version', packageInfo.version);
+	}
 
   /**
    * life-cycle method

@@ -1,28 +1,17 @@
-import {
-  AfterContentInit,
-  ContentChildren,
-  Directive,
-  Host,
-  OnDestroy,
-  QueryList,
-} from "@angular/core";
-import { filter, take, withLatestFrom } from "rxjs/operators";
-import { untilDestroy } from "../../../shared/operators/untilDestroy";
-import { ContentMode, Match, ScanResult, ScanSource } from "../../models";
-import { HighlightService } from "../../services/highlight.service";
-import { ReportService } from "../../services/report.service";
-import * as helpers from "../../utils/highlight-helpers";
-import { MatchComponent } from "../match/match.component";
-import { OriginalComponent } from "../original/original.component";
+import { AfterContentInit, ContentChildren, Directive, Input, OnDestroy, QueryList } from '@angular/core';
+import { filter, take, withLatestFrom } from 'rxjs/operators';
+import { untilDestroy } from '../../../shared/operators/untilDestroy';
+import { ContentMode, Match, ScanResult, ScanSource } from '../../models';
+import { HighlightService } from '../../services/highlight.service';
+import { ReportService } from '../../services/report.service';
+import * as helpers from '../../utils/highlight-helpers';
+import { MatchComponent } from '../match/match.component';
 @Directive({
   selector: "[crSourceTextHelper]",
 })
 export class SourceTextHelperDirective implements AfterContentInit, OnDestroy {
-  constructor(
-    @Host() private host: OriginalComponent,
-    private highlightService: HighlightService,
-    private reportService: ReportService
-  ) {}
+	@Input() public host: { currentPage: number; textMatches: any };
+	constructor(private highlightService: HighlightService, private reportService: ReportService) {}
 
   @ContentChildren(MatchComponent)
   private children: QueryList<MatchComponent>;

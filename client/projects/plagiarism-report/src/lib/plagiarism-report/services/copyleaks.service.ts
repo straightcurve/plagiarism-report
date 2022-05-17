@@ -24,11 +24,26 @@ import { v4 } from "uuid";
 
 @Injectable()
 export class CopyleaksService {
-  public guid = v4();
+	private readonly _complete$ = new Subject<CompleteResult>();
+	private readonly _preview$ = new Subject<ResultPreview>();
+	private readonly _source$ = new Subject<ScanSource>();
+	private readonly _results$ = new Subject<ResultItem[]>();
+	private readonly _progress$ = new Subject<number>();
+	private readonly _config$ = new BehaviorSubject<CopyleaksReportConfig>({ ...DEFAULT_REPORT_CONFIG });
+	private readonly _destroy$ = new Subject();
+	private readonly _filteredResultsIds$ = new Subject<string[]>();
+	private readonly _scoreUpdate$ = new Subject<number>();
+	private readonly _totalResults$ = new Subject<number>();
 
-  constructor() {
-    console.log(this.guid);
-  }
+	public readonly onCompleteResult$ = this._complete$.asObservable();
+	public readonly onResultPreview$ = this._preview$.asObservable();
+	public readonly onScanSource$ = this._source$.asObservable();
+	public readonly onResultItems$ = this._results$.asObservable();
+	public readonly onProgress$ = this._progress$.asObservable();
+	public readonly onReportConfig$ = this._config$.asObservable();
+	public readonly onTotalResultsChange$ = this._totalResults$.asObservable();
+	public readonly filteredResultsIds$ = this._filteredResultsIds$.asObservable();
+	public readonly scoreUpdate$ = this._scoreUpdate$.asObservable();
 
   private readonly _complete$ = new Subject<CompleteResult>();
   private readonly _preview$ = new Subject<ResultPreview>();
@@ -57,6 +72,15 @@ export class CopyleaksService {
   public readonly onDeleteProccessFinish$ = new Subject<CompleteResult>();
 
   public readonly onDestroy$ = this._destroy$.asObservable();
+	/**
+	 * Init/Set the filtered results.
+	 * @param ids a list of results ids to be filtered.
+	 * @param newAggregatedScore updated score after filter.
+	 */
+	public setFilteredResultsIds(ids: string[], newAggregatedScore: number) {
+		this._filteredResultsIds$.next(ids);
+		this._scoreUpdate$.next(newAggregatedScore);
+	}
 
   /**
    * set total results (optional)
@@ -186,7 +210,7 @@ export class CopyleaksService {
    */
   public notifyDestroy() {
     this._destroy$.next();
-    this.setFilteredResultsIds([]);
+    this.setFilteredResultsIds([], null);
   }
 
   // Simple object validation

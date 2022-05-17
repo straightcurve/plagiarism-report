@@ -9,34 +9,38 @@
   <input matInput type="search" [(ngModel)]="query" />
 </mat-form-field>
 <mat-dialog-content>
-  <div
-    result
-    *ngFor="let result of results | search: 'title,id':query"
-    fxLayout="row"
-    fxLayoutAlign="space-between center"
-    (click)="toggleResult(result)"
-    matRipple
-  >
-    <span check-item>
-      {{ result.title }}
-    </span>
-    <mat-pseudo-checkbox
-      [state]="isHidden(result) ? 'unchecked' : 'checked'"
-    ></mat-pseudo-checkbox>
-  </div>
+	<div
+		result
+		*ngFor="let result of results | search: 'title,id':query"
+		fxLayout="row"
+		fxLayoutAlign="space-between center"
+		(click)="toggleResult(result)"
+		matRipple>
+		<span check-item>
+			{{ result.title }}
+			<br />
+			<!--  -->
+			<ng-container *ngIf="result?.url">
+				<a [href]="result?.url" target="_blank">
+					{{ result?.url }}
+				</a>
+			</ng-container>
+			<!--  -->
+			<ng-container *ngIf="!result?.url && result?.metadata?.filename">
+				{{ result?.metadata?.filename }}
+			</ng-container>
+		</span>
+		<mat-pseudo-checkbox [state]="isHidden(result) ? 'unchecked' : 'checked'"></mat-pseudo-checkbox>
+	</div>
 </mat-dialog-content>
-<div
-  fxLayout="row"
-  fxLayoutAlign="space-between center"
-  style="padding-top: 1em"
->
-  <a button-link href="javascript:void(0)" (click)="checkAll()">
-    {{
-      hidden.length === results.length
-        ? translations?.FILTER_DIALOG?.CHECK_ALL || "check all"
-        : translations?.FILTER_DIALOG?.UNCHECK_ALL || "uncheck all"
-    }}
-  </a>
+<div fxLayout="row" fxLayoutAlign="space-between center" style="padding-top: 1em">
+	<a button-link href="javascript:void(0)" (click)="checkAll()">
+		{{
+			hidden.length === results.length
+				? translations?.FILTER_DIALOG?.CHECK_ALL || 'check all'
+				: translations?.FILTER_DIALOG?.UNCHECK_ALL || 'uncheck all'
+		}}
+	</a>
 
   <button mat-raised-button (click)="close(true)" color="primary">
     {{ translations?.SHARED?.SAVE || "SAVE" }}

@@ -34,44 +34,32 @@
     </cr-panel-action>
   </cr-panel-actions>
 
-  <cr-panel-body fxLayout="column nowrap">
-    <div fxFlex fxLayout="column" fxLayoutGap="1em">
-      <div card fxFlex class="mat-elevation-z3" fxLayout="column">
-        <!-- skeleton placeholder -->
-        <ng-container
-          *ngTemplateOutlet="!suspect ? skeleton__body : null"
-        ></ng-container>
-        <!-- text for one-to-one -->
-        <div
-          [fxShow]="suspect && !(hasHtml && isHtml)"
-          crSuspectTextHelper
-          text-container
-          [ngStyle]="{ 'font-size': zoom + 'em' }"
-          [dir]="direction"
-        >
-          <ng-container *ngIf="textMatches; else clean">
-            <ng-container *ngFor="let partial of textMatches[currentPage - 1]">
-              <span *ngIf="partial.match.type === MatchType.none">{{
-                partial.content
-              }}</span>
-              <span
-                *ngIf="partial.match.type !== MatchType.none"
-                [cr-match]="partial.match"
-                origin="suspect"
-              >
-                {{ partial.content }}
-              </span>
-            </ng-container>
-          </ng-container>
-        </div>
-        <!-- text without match highlighting -->
-        <ng-template #clean>
-          {{
-            suspect &&
-              (suspect.text.value
-                | slice: pages[currentPage - 1]:pages[currentPage])
-          }}
-        </ng-template>
+	<cr-panel-body fxLayout="column nowrap">
+		<div fxFlex fxLayout="column" fxLayoutGap="1em">
+			<div card fxFlex class="mat-elevation-z3" fxLayout="column">
+				<!-- skeleton placeholder -->
+				<ng-container *ngTemplateOutlet="!suspect ? skeleton__body : null"></ng-container>
+				<!-- text for one-to-one -->
+				<div
+					[fxShow]="suspect && !(hasHtml && isHtml)"
+					crSuspectTextHelper
+					[host]="this"
+					text-container
+					[ngStyle]="{ 'font-size': zoom + 'em' }"
+					[dir]="direction">
+					<ng-container *ngIf="textMatches; else clean">
+						<ng-container *ngFor="let partial of textMatches[currentPage - 1]">
+							<span *ngIf="partial.match.type === MatchType.none">{{ partial.content }}</span>
+							<span *ngIf="partial.match.type !== MatchType.none" [cr-match]="partial.match" origin="suspect">
+								{{ partial.content }}
+							</span>
+						</ng-container>
+					</ng-container>
+				</div>
+				<!-- text without match highlighting -->
+				<ng-template #clean>
+					{{ suspect && (suspect.text.value | slice: pages[currentPage - 1]:pages[currentPage]) }}
+				</ng-template>
 
         <iframe
           fxFlex
@@ -81,22 +69,18 @@
       </div>
     </div>
 
-    <div
-      content-footer
-      fxLayoutAlign="space-between center"
-      fxLayout="row-reverse nowrap"
-    >
-      <ng-container *ngIf="suspect; else skeleton__pagination">
-        <cr-mat-pagination
-          [hidden]="(hasHtml && isHtml) || pages?.length === 1"
-          [currentPage]="currentPage"
-          (page)="onPage($event)"
-          [totalPages]="pages.length"
-        ></cr-mat-pagination>
-      </ng-container>
-      <cr-powered-by></cr-powered-by>
-    </div>
-  </cr-panel-body>
+		<div content-footer fxLayoutAlign="space-between center" fxLayout="row-reverse nowrap">
+			<ng-container *ngIf="suspect; else skeleton__pagination">
+				<cr-mat-pagination
+					[hidden]="(hasHtml && isHtml) || pages?.length === 1"
+					showFirstLastButtons
+					[currentPage]="currentPage"
+					(page)="onPage($event)"
+					[totalPages]="pages.length"></cr-mat-pagination>
+			</ng-container>
+			<cr-powered-by></cr-powered-by>
+		</div>
+	</cr-panel-body>
 </cr-panel>
 
 <ng-template #skeleton__pagination>
@@ -204,20 +188,17 @@
   </button>
 </ng-template>
 <ng-template #menu__toggle_html>
-  <button
-    mat-button
-    [matTooltip]="
-      isHtml
-        ? translates?.SHARED?.ACTIONS?.SWITCH_TO_TEXTUAL_MODE ||
-          'Switch to textual mode'
-        : translates?.SHARED?.ACTIONS?.SWITCH_TO_RICH_TEXT_MODE ||
-          'Switch to rich text mode'
-    "
-    [disabled]="!hasHtml"
-    (click)="toggleContent()"
-  >
-    <mat-icon>{{ isHtml ? "title" : "insert_photo" }}</mat-icon>
-  </button>
+	<button
+		mat-button
+		[matTooltip]="
+			isHtml
+				? translates?.SHARED?.ACTIONS?.SWITCH_TO_TEXTUAL_MODE || 'Switch to textual mode'
+				: translates?.SHARED?.ACTIONS?.SWITCH_TO_RICH_TEXT_MODE || 'Switch to rich text mode'
+		"
+		[disabled]="!hasHtml"
+		(click)="toggleContent()">
+		<mat-icon>{{ isHtml ? 'title' : 'insert_photo' }}</mat-icon>
+	</button>
 </ng-template>
 <ng-template #menu__align_left>
   <button
@@ -229,46 +210,36 @@
   </button>
 </ng-template>
 <ng-template #menu__launch_url>
-  <button
-    mat-button
-    [matTooltip]="
-      translates?.SHARED?.ACTIONS?.LAUNCH_URL || 'Open URL in a new tab'
-    "
-    (click)="openUrl()"
-  >
-    <mat-icon>launch</mat-icon>
-  </button>
+	<button
+		mat-button
+		[matTooltip]="translates?.SHARED?.ACTIONS?.LAUNCH_URL || 'Open URL in a new tab'"
+		(click)="openUrl()">
+		<mat-icon>launch</mat-icon>
+	</button>
 </ng-template>
 <ng-template #menu__align_right>
-  <button
-    mat-button
-    [matTooltip]="translates?.SHARED?.ACTIONS?.ALIGN_RIGHT || 'Align right'"
-    (click)="direction = 'rtl'"
-  >
-    <mat-icon>format_align_right</mat-icon>
-  </button>
+	<button
+		mat-button
+		[matTooltip]="translates?.SHARED?.ACTIONS?.ALIGN_RIGHT || 'Align right'"
+		(click)="direction = 'rtl'">
+		<mat-icon>format_align_right</mat-icon>
+	</button>
 </ng-template>
 <ng-template #menu__font_inc>
-  <button
-    mat-button
-    [matTooltip]="
-      translates?.SHARED?.ACTIONS?.INCREASE_FONT_SIZE || 'Increase font size'
-    "
-    (click)="increaseFontSize()"
-  >
-    <mat-icon>zoom_in</mat-icon>
-  </button>
+	<button
+		mat-button
+		[matTooltip]="translates?.SHARED?.ACTIONS?.INCREASE_FONT_SIZE || 'Increase font size'"
+		(click)="increaseFontSize()">
+		<mat-icon>zoom_in</mat-icon>
+	</button>
 </ng-template>
 <ng-template #menu__font_dec>
-  <button
-    mat-button
-    [matTooltip]="
-      translates?.SHARED?.ACTIONS?.DECREASE_FONT_SIZE || 'Decrease font size'
-    "
-    (click)="decreaseFontSize()"
-  >
-    <mat-icon>zoom_out</mat-icon>
-  </button>
+	<button
+		mat-button
+		[matTooltip]="translates?.SHARED?.ACTIONS?.DECREASE_FONT_SIZE || 'Decrease font size'"
+		(click)="decreaseFontSize()">
+		<mat-icon>zoom_out</mat-icon>
+	</button>
 </ng-template>
 <ng-template #menu__show_results>
   <button
@@ -282,17 +253,13 @@
 
 <!-- skeletons -->
 <ng-template #skeleton__body>
-  <div
-    fxFlex
-    fxLayout="column"
-    fxLayoutAlign="start stretch"
-    fxLayoutGap="1em"
-    style="overflow: hidden; margin: 1em"
-    skeleton__body
-  >
-    <ngx-skeleton-loader
-      [theme]="{ height: '100%' }"
-      *ngFor="let item of 20 | array; index as i"
-    ></ngx-skeleton-loader>
-  </div>
+	<div
+		fxFlex
+		fxLayout="column"
+		fxLayoutAlign="start stretch"
+		fxLayoutGap="1em"
+		style="overflow: hidden; margin: 1em"
+		skeleton__body>
+		<ngx-skeleton-loader [theme]="{ height: '100%' }" *ngFor="let item of 20 | array; index as i"></ngx-skeleton-loader>
+	</div>
 </ng-template>
